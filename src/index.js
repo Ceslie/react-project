@@ -5,17 +5,21 @@ import {
   Switch,
   Route
 } from 'react-router-dom'
+import {Provider} from 'react-redux';
 
 import Login from './containers/login/login';
 import Register from './containers/register/register';
 import Main from './containers/main/main';
+import store from './reduex/store'
 
 ReactDOM.render((
-  <BrowserRouter>
-    <Switch>
-      <Route path='/login' component={Login}/>
-      <Route path='/register' component={Register}/>
-      <Route component={Main}/>
-    </Switch>
-  </BrowserRouter>
-),document.getElementById("app"));
+  <Provider store={store}>
+    <BrowserRouter>
+      <Switch>
+        <Route path='/login' component={Login}/>
+        <Route path='/register' component={Register}/>
+        <Route component={Main}/> {/*默认路由: 只要不与上面的匹配, 就显示当前组件*/}
+      </Switch>
+    </BrowserRouter>
+  </Provider>
+), document.getElementById("app"));
