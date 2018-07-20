@@ -11,7 +11,7 @@ class LaobanInfo extends Component {
     )
   }
 }
-
+//
 export default connect(
   state => ({})
 )(LaobanInfo);
