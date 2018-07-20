@@ -1,8 +1,13 @@
 import React,{Component} from 'react';
-import {NavBar,List,WhiteSpace,WingBlank,InputItem,Button,Radio} from 'antd-mobile'
+import {NavBar,List,WhiteSpace,WingBlank,InputItem,Button,Radio} from 'antd-mobile';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
+
 
 import Logo from '../../components/logo/logo'
+import {register} from '../../reduex/actions';
 
+//Register是UI组件
 class Register extends Component {
 
   state= {
@@ -19,6 +24,7 @@ class Register extends Component {
   };
   register = () => {
     console.log(this.state);
+    this.props.register(this.state)
   };
   goLogin = () => {
     //跳转到登录路由
@@ -27,12 +33,18 @@ class Register extends Component {
 
   render (){
     const {type} = this.state;
+    const {msg, redirectTo} = this.props.user;
+    if (redirectTo){
+      // 跳转到redirectTo
+      return <Redirect to={redirectTo}/>
+    }
     return(
       <div>
         <NavBar>用户注册</NavBar>
         <Logo />
         <WingBlank>
           <List>
+            <p className='error-msg'>{msg}</p>
             <WhiteSpace/>
             <InputItem placeholder='请输入用户名' onChange={val => this.handleChange('username',val)}>用户名:</InputItem>
             <WhiteSpace/>
@@ -56,4 +68,16 @@ class Register extends Component {
   }
 }
 
-export default Register;
+// 向外暴露是包含UI组件的容器组件
+export default connect(
+  state => ({user: state.user}),
+  {register}
+)(Register);
+
+/*
+组件的render什么时候执行?
+  1. 初始显示
+  2. 更新显示
+    1). 自身状态变化: this.setState()
+    2). 接收的外部数据属性变化了
+*/

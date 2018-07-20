@@ -1,6 +1,9 @@
 import React,{Component} from 'react';
 import {NavBar,List,WhiteSpace,WingBlank,InputItem,Button,Radio} from 'antd-mobile'
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 
+import {login} from '../../reduex/actions';
 import Logo from '../../components/logo/logo'
 
 class Login extends Component {
@@ -17,7 +20,7 @@ class Login extends Component {
     })
   }
   login = () => {
-    console.log(this.state)
+    this.props.login(this.state)
   }
 
   goRegister = () => {
@@ -26,12 +29,17 @@ class Login extends Component {
   }
 
   render (){
+    const {msg, redirectTo} = this.props.user;
+    if (redirectTo) {
+      return <Redirect to={redirectTo}/>
+    }
     return(
       <div>
         <NavBar>用户登录</NavBar>
         <Logo/>
         <WingBlank>
           <List>
+            <p className='error-msg'>{msg}</p>
             <WhiteSpace/>
             <InputItem placeholder='请输入用户名' onChange={val=> this.handleChange('username', val)}>用户名:</InputItem>
             <WhiteSpace/>
@@ -47,4 +55,7 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default connect(
+  state => ({user: state.user}),
+  {login}
+)(Login);
